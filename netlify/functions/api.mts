@@ -128,6 +128,10 @@ export default async (req: Request, context: Context) => {
   const method = req.method;
   const role = roleFor(req);
 
+  if (!Netlify.env.get("CONTRIBUTOR_PASSPHRASE") || !Netlify.env.get("ADMIN_PASSPHRASE")) {
+    console.error("CONTRIBUTOR_PASSPHRASE or ADMIN_PASSPHRASE is not set for this deploy.");
+    return error("The cookbook's passphrases haven't been set up yet. Please let the cookbook team know.", 503);
+  }
   if (!role) return error("That passphrase isn't right. Please check and try again.", 401);
 
   try {
