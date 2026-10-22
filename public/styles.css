@@ -52,6 +52,14 @@ main {
 }
 main.wide { max-width: 1100px; }
 
+/* ---------- Page footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 8px 16px 32px;
+  font-size: 0.9rem;
+}
+.site-footer a { color: var(--muted); }
+
 /* ---------- Cards and headings ---------- */
 .card {
   background: var(--paper);
