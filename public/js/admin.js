@@ -196,8 +196,8 @@ $("#delete-btn").addEventListener("click", async () => {
 });
 
 // ---------- Exports ----------
-function download(filename, text, type) {
-  const url = URL.createObjectURL(new Blob([text], { type }));
+function download(filename, content, type) {
+  const url = URL.createObjectURL(new Blob([content], { type }));
   const a = Object.assign(document.createElement("a"), { href: url, download: filename });
   document.body.append(a);
   a.click();
@@ -207,35 +207,161 @@ function download(filename, text, type) {
 
 const today = () => new Date().toISOString().slice(0, 10);
 
-const CSV_COLUMNS = [
-  ["Category", "category"], ["Recipe", "title"], ["Submitted by", "submittedBy"], ["Email", "email"],
-  ["Meat/Dairy/Pareve", "kosher"], ["Holidays", "holidays"], ["Serves", "servings"],
-  ["Prep time", "prepTime"], ["Cook time", "cookTime"], ["Ingredients", "ingredients"],
-  ["Instructions", "instructions"], ["Story", "story"], ["Tips", "tips"], ["Status", "status"],
-  ["Has photo", "photoId"], ["Admin notes", "adminNotes"], ["Submitted on", "createdAt"], ["ID", "id"],
-];
-
 function sortedForExport() {
   return [...recipes].sort((a, b) =>
     CATEGORIES.indexOf(a.category) - CATEGORIES.indexOf(b.category) || a.title.localeCompare(b.title));
 }
 
-$("#csv-btn").addEventListener("click", () => {
+// Turn "Bubbie's Honey Cake!" into "bubbie-s-honey-cake" so it's safe as a file name.
+const slug = (text) =>
+  String(text ?? "").normalize("NFKD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "").toLowerCase().slice(0, 50) || "recipe";
+
+// Give every photo a readable, unique file name, in a folder per category,
+// numbered in book order: photos/08-desserts-baked-goods/honey-cake--the-cohen-family.jpg
+function photoFileNames(list) {
+  const names = new Map();
+  const used = new Set();
+  for (const r of list) {
+    if (!r.photoId) continue;
+    const folder = `${String(CATEGORIES.indexOf(r.category) + 1).padStart(2, "0")}-${slug(r.category)}`;
+    const base = `photos/${folder}/${slug(r.title)}--${slug(r.submittedBy)}`;
+    let name = `${base}.jpg`;
+    for (let n = 2; used.has(name); n++) name = `${base}-${n}.jpg`;
+    used.add(name);
+    names.set(r.id, name);
+  }
+  return names;
+}
+
+const CSV_COLUMNS = [
+  ["Category", "category"], ["Recipe", "title"], ["Submitted by", "submittedBy"], ["Email", "email"],
+  ["Meat/Dairy/Pareve", "kosher"], ["Holidays", "holidays"], ["Serves", "servings"],
+  ["Prep time", "prepTime"], ["Cook time", "cookTime"], ["Ingredients", "ingredients"],
+  ["Instructions", "instructions"], ["Story", "story"], ["Tips", "tips"], ["Status", "status"],
+  ["Photo file", "photoFile"], ["Admin notes", "adminNotes"], ["Submitted on", "createdAt"], ["ID", "id"],
+];
+
+function csvText(list, photoNames) {
   // A leading ' stops Excel from treating text like "=SUM(...)" as a formula.
   const cell = (v) => `"${String(v ?? "").replace(/^[=+@\t\r]/, "'$&").replace(/"/g, '""')}"`;
-  const rows = sortedForExport().map((r) => CSV_COLUMNS.map(([, key]) => {
+  const rows = list.map((r) => CSV_COLUMNS.map(([, key]) => {
     if (key === "holidays") return cell((r.holidays || []).join(", "));
-    if (key === "photoId") return cell(r.photoId ? "Yes" : "No");
+    if (key === "photoFile") return cell(photoNames.get(r.id) ?? "");
     if (key === "status") return cell(STATUS_LABELS[r.status] || r.status);
     return cell(r[key]);
   }).join(","));
-  const csv = [CSV_COLUMNS.map(([h]) => cell(h)).join(","), ...rows].join("\r\n");
   // The "﻿" at the start tells Excel the file is UTF-8 (keeps accents and Hebrew intact).
-  download(`hacds-cookbook-recipes-${today()}.csv`, "﻿" + csv, "text/csv;charset=utf-8");
+  return "﻿" + [CSV_COLUMNS.map(([h]) => cell(h)).join(","), ...rows].join("\r\n");
+}
+
+$("#csv-btn").addEventListener("click", () => {
+  const list = sortedForExport();
+  download(`hacds-cookbook-recipes-${today()}.csv`, csvText(list, photoFileNames(list)), "text/csv;charset=utf-8");
 });
 
-$("#json-btn").addEventListener("click", () => {
-  download(`hacds-cookbook-backup-${today()}.json`,
-    JSON.stringify({ exportedAt: new Date().toISOString(), recipes: sortedForExport() }, null, 2),
-    "application/json");
+// One ZIP with the spreadsheet, a full backup and every photo.
+$("#zip-btn").addEventListener("click", async () => {
+  const button = $("#zip-btn");
+  const label = button.textContent;
+  button.disabled = true;
+  try {
+    const list = sortedForExport();
+    const photoNames = photoFileNames(list);
+    const encode = (text) => new TextEncoder().encode(text);
+    const files = [
+      { name: "recipes.csv", data: encode(csvText(list, photoNames)) },
+      { name: "recipes-backup.json", data: encode(JSON.stringify({
+        exportedAt: new Date().toISOString(),
+        recipes: list.map((r) => ({ ...r, photoFile: photoNames.get(r.id) ?? null })),
+      }, null, 2)) },
+      { name: "READ ME.txt", data: encode([
+        "HACDS Community Cookbook export",
+        `Made on ${new Date().toLocaleString()}`,
+        "",
+        "recipes.csv          Every recipe. Opens in Excel, Numbers or Google Sheets.",
+        "                     The \"Photo file\" column says which photo belongs to which recipe.",
+        "recipes-backup.json  A complete backup of every recipe.",
+        "photos/              Every uploaded photo, in a folder per book chapter.",
+      ].join("\r\n")) },
+    ];
+    const missing = [];
+    let done = 0;
+    const withPhotos = list.filter((r) => photoNames.has(r.id));
+    for (const r of withPhotos) {
+      button.textContent = `Gathering photos ${++done} of ${withPhotos.length}…`;
+      const res = await fetch(`/api/photos/${encodeURIComponent(r.photoId)}`, { headers: { "x-passphrase": passphrase } });
+      if (!res.ok) { missing.push(r.title); continue; }
+      files.push({ name: photoNames.get(r.id), data: new Uint8Array(await res.arrayBuffer()) });
+    }
+    download(`hacds-cookbook-export-${today()}.zip`, makeZip(files), "application/zip");
+    if (missing.length) alert(`These photos couldn't be downloaded:\n\n${missing.join("\n")}`);
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = label;
+  }
 });
+
+// ---------- A tiny ZIP maker ----------
+// Files are stored as-is (photos are already compressed, so squeezing them gains nothing).
+const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
+  let c = n;
+  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+  return c >>> 0;
+});
+
+function crc32(bytes) {
+  let c = 0xffffffff;
+  for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+
+function makeZip(files) {
+  const now = new Date();
+  const time = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+  const date = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+  const parts = [];
+  const directory = [];
+  let offset = 0;
+  for (const file of files) {
+    const name = new TextEncoder().encode(file.name);
+    const size = file.data.length;
+    const crc = crc32(file.data);
+    const local = new DataView(new ArrayBuffer(30));
+    local.setUint32(0, 0x04034b50, true);
+    local.setUint16(4, 20, true);
+    local.setUint16(6, 0x0800, true); // file names are UTF-8
+    local.setUint16(10, time, true);
+    local.setUint16(12, date, true);
+    local.setUint32(14, crc, true);
+    local.setUint32(18, size, true);
+    local.setUint32(22, size, true);
+    local.setUint16(26, name.length, true);
+    parts.push(local, name, file.data);
+
+    const entry = new DataView(new ArrayBuffer(46));
+    entry.setUint32(0, 0x02014b50, true);
+    entry.setUint16(4, 20, true);
+    entry.setUint16(6, 20, true);
+    entry.setUint16(8, 0x0800, true);
+    entry.setUint16(12, time, true);
+    entry.setUint16(14, date, true);
+    entry.setUint32(16, crc, true);
+    entry.setUint32(20, size, true);
+    entry.setUint32(24, size, true);
+    entry.setUint16(28, name.length, true);
+    entry.setUint32(42, offset, true);
+    directory.push(entry, name);
+    offset += 30 + name.length + size;
+  }
+  const directorySize = directory.reduce((n, part) => n + part.byteLength, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, files.length, true);
+  end.setUint16(10, files.length, true);
+  end.setUint32(12, directorySize, true);
+  end.setUint32(16, offset, true);
+  return new Blob([...parts, ...directory, end], { type: "application/zip" });
+}

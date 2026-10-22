@@ -1,7 +1,9 @@
 /* ---------- Colors and sizes used everywhere ---------- */
 :root {
-  --navy: #1f3a5f;
-  --navy-dark: #152a46;
+  --brand: #761026; /* maroon from the school logo */
+  --brand-dark: #560b1b;
+  --brand-tint: #f8ecef;
+  --brand-tint-line: #ecd3d9;
   --gold: #c99a2e;
   --cream: #faf6ee;
   --paper: #ffffff;
@@ -32,7 +34,7 @@ body {
 
 /* ---------- Page header ---------- */
 .site-header {
-  background: var(--navy);
+  background: var(--brand);
   color: #fff;
   padding: 20px 16px 22px;
   text-align: center;
@@ -83,7 +85,7 @@ main.wide { max-width: 1100px; }
   gap: 10px;
   margin: 0 0 14px;
   font-size: 1.15rem;
-  color: var(--navy);
+  color: var(--brand);
 }
 .step {
   display: inline-grid;
@@ -92,7 +94,7 @@ main.wide { max-width: 1100px; }
   height: 30px;
   flex: none;
   border-radius: 50%;
-  background: var(--navy);
+  background: var(--brand);
   color: #fff;
   font-size: 0.95rem;
 }
@@ -125,8 +127,8 @@ select {
 textarea { resize: vertical; min-height: 90px; }
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--navy);
-  box-shadow: 0 0 0 3px rgba(31, 58, 95, 0.18);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(118, 16, 38, 0.18);
 }
 
 .req { color: var(--red); }
@@ -157,8 +159,8 @@ legend { font-weight: 600; margin-bottom: 8px; padding: 0; }
   user-select: none;
 }
 .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
-.chip:has(input:checked) { background: var(--navy); border-color: var(--navy); color: #fff; }
-.chip:has(input:focus-visible) { box-shadow: 0 0 0 3px rgba(31, 58, 95, 0.25); }
+.chip:has(input:checked) { background: var(--brand); border-color: var(--brand); color: #fff; }
+.chip:has(input:focus-visible) { box-shadow: 0 0 0 3px rgba(118, 16, 38, 0.25); }
 
 .check {
   display: flex;
@@ -174,7 +176,7 @@ legend { font-weight: 600; margin-bottom: 8px; padding: 0; }
   margin: 0;
   padding: 0;
   appearance: auto;
-  accent-color: var(--navy);
+  accent-color: var(--brand);
 }
 
 /* ---------- Buttons ---------- */
@@ -187,18 +189,18 @@ legend { font-weight: 600; margin-bottom: 8px; padding: 0; }
   padding: 12px 22px;
   font: 600 1rem/1.2 var(--font);
   color: #fff;
-  background: var(--navy);
+  background: var(--brand);
   border: 0;
   border-radius: 999px;
   cursor: pointer;
   text-decoration: none;
 }
-.button:hover { background: var(--navy-dark); }
+.button:hover { background: var(--brand-dark); }
 .button:disabled { opacity: 0.6; cursor: wait; }
-.button.secondary { background: #fff; color: var(--navy); border: 1.5px solid var(--navy); }
-.button.secondary:hover { background: #eef2f7; }
+.button.secondary { background: #fff; color: var(--brand); border: 1.5px solid var(--brand); }
+.button.secondary:hover { background: var(--brand-tint); }
 .button.danger { background: #fff; color: var(--red); border: 1.5px solid var(--red); }
-.button.link { background: none; color: var(--navy); text-decoration: underline; padding: 8px; min-height: 0; }
+.button.link { background: none; color: var(--brand); text-decoration: underline; padding: 8px; min-height: 0; }
 .button.small { min-height: 38px; padding: 8px 14px; font-size: 0.92rem; }
 .button.block { width: 100%; }
 
@@ -219,7 +221,7 @@ legend { font-weight: 600; margin-bottom: 8px; padding: 0; }
   font-weight: 500;
 }
 .notice.error { background: #fbeaea; color: var(--red); border: 1px solid #efc6c6; }
-.notice.info { background: #eef2f7; color: var(--navy); border: 1px solid #cfd9e6; }
+.notice.info { background: var(--brand-tint); color: var(--brand); border: 1px solid var(--brand-tint-line); }
 .notice.success { background: #e9f5ee; color: var(--green); border: 1px solid #bfe0cc; }
 
 .center { text-align: center; }
@@ -262,7 +264,7 @@ dialog::backdrop { background: rgba(20, 25, 35, 0.55); }
   justify-content: space-between;
   gap: 10px;
   padding: 12px 16px;
-  background: var(--navy);
+  background: var(--brand);
   color: #fff;
 }
 .dialog-head h2 { margin: 0; font-size: 1.1rem; }
@@ -272,7 +274,7 @@ dialog::backdrop { background: rgba(20, 25, 35, 0.55); }
 /* ---------- Book-style recipe (preview, admin and print) ---------- */
 .recipe { font-family: var(--serif); color: #1d1d1d; }
 .recipe header { text-align: center; border-bottom: 1px solid #d8cfbd; padding-bottom: 10px; margin-bottom: 14px; }
-.recipe-title { font-size: 1.9rem; line-height: 1.15; margin: 0; color: var(--navy); }
+.recipe-title { font-size: 1.9rem; line-height: 1.15; margin: 0; color: var(--brand); }
 .byline { font-style: italic; margin: 6px 0 0; color: #555; }
 .tags { margin: 8px 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .tags span {
@@ -322,10 +324,10 @@ dialog::backdrop { background: rgba(20, 25, 35, 0.55); }
   border-radius: 12px;
   padding: 10px 14px;
 }
-.stat b { display: block; font-size: 1.5rem; color: var(--navy); }
+.stat b { display: block; font-size: 1.5rem; color: var(--brand); }
 .stat span { color: var(--muted); font-size: 0.88rem; }
 
-.group-title { margin: 22px 0 8px; font: 700 1.05rem/1.2 var(--serif); color: var(--navy); }
+.group-title { margin: 22px 0 8px; font: 700 1.05rem/1.2 var(--serif); color: var(--brand); }
 .group-title small { color: var(--muted); font: 400 0.9rem var(--font); }
 .recipe-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .recipe-row {
@@ -342,7 +344,7 @@ dialog::backdrop { background: rgba(20, 25, 35, 0.55); }
   color: inherit;
   cursor: pointer;
 }
-.recipe-row:hover { border-color: var(--navy); }
+.recipe-row:hover { border-color: var(--brand); }
 .recipe-row .thumb {
   width: 52px;
   height: 52px;
@@ -364,7 +366,7 @@ dialog::backdrop { background: rgba(20, 25, 35, 0.55); }
   border-radius: 999px;
   white-space: nowrap;
 }
-.pill.new { background: #eef2f7; color: var(--navy); }
+.pill.new { background: var(--brand-tint); color: var(--brand); }
 .pill.approved { background: #e9f5ee; color: var(--green); }
 .pill.needs-follow-up { background: #fdf3e1; color: var(--amber); }
 
@@ -372,13 +374,13 @@ dialog::backdrop { background: rgba(20, 25, 35, 0.55); }
 .tabs button {
   flex: 1;
   min-height: 42px;
-  border: 1.5px solid var(--navy);
+  border: 1.5px solid var(--brand);
   background: #fff;
-  color: var(--navy);
+  color: var(--brand);
   border-radius: 999px;
   font: 600 0.95rem var(--font);
   cursor: pointer;
 }
-.tabs button[aria-selected="true"] { background: var(--navy); color: #fff; }
+.tabs button[aria-selected="true"] { background: var(--brand); color: #fff; }
 
 .empty { text-align: center; color: var(--muted); padding: 32px 0; }

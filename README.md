@@ -9,7 +9,7 @@ A small website for collecting recipes from the Hebrew Academy Community Day Sch
 | Page | Address | Who uses it | What it does |
 |---|---|---|---|
 | **Share a recipe** | `/` | Families | Enter the community passphrase, fill in a 6-step form, preview how it will look in the book, submit. Works on phones. Progress is saved on the device while typing. |
-| **Admin** | `/admin.html` | Cookbook team | Sign in with the admin passphrase. See every recipe grouped by category, search and filter, edit, mark as *New / Approved / Needs follow-up*, add private notes, delete. Download a spreadsheet (CSV) or a full backup (JSON). |
+| **Admin** | `/admin.html` | Cookbook team | Sign in with the admin passphrase. See every recipe grouped by category, search and filter, edit, mark as *New / Approved / Needs follow-up*, add private notes, delete. Download a spreadsheet (CSV), or **Everything + photos (ZIP)**: one file with the spreadsheet, a full backup and every uploaded photo, sorted into a folder per chapter and named after its recipe. |
 | **Print-ready book** | `/book.html` | Cookbook team | Builds the whole book: cover, welcome note, contents, a divider page per category, one recipe per page, a holiday index and a contributor thank-you page. Choose the page size, then print to PDF for the printer. |
 
 ## How it's built (in plain words)
@@ -44,7 +44,7 @@ Passphrases ignore capital letters and extra spaces, so phones that auto-capital
    - More settings → **Headers and footers: off**, **Background graphics: on**, Margins: **Default**
 4. Upload that PDF as the inside pages to a print-on-demand service (e.g. Lulu or Blurb) or a local printer, using the same page size. The pages already have a wider inside margin for the spine and page numbers at the bottom. You'll design the hardcover jacket separately in the printer's cover tool.
 
-Tip: download a **Backup (JSON)** from the admin page every so often, so you always have a copy of every recipe.
+Tip: download **Everything + photos (ZIP)** from the admin page every so often, so you always have a copy of every recipe and photo. It's also the file to hand a book designer if you'd rather have one lay out the book.
 
 ## Running it on your own computer (optional)
 
