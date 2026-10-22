@@ -91,6 +91,7 @@ function build() {
 
   const cover = `
     <section class="page cover"><div class="frame">
+      <img class="cover-logo" src="/logo.png" alt="Hebrew Academy logo" onerror="this.remove()" />
       <h1>${escapeHtml(s.title || DEFAULTS.title)}</h1>
       ${s.subtitle ? `<p class="subtitle">${escapeHtml(s.subtitle)}</p>` : ""}
       <p class="org">Hebrew Academy Community Day School<br />Parents Association</p>
@@ -152,6 +153,16 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-$("#print-btn").addEventListener("click", () => window.print());
+// Wait until the logo and every recipe photo have finished loading, so none are missing from the PDF.
+$("#print-btn").addEventListener("click", async () => {
+  const button = $("#print-btn");
+  button.disabled = true;
+  button.textContent = "Getting pictures ready…";
+  await Promise.all([...document.querySelectorAll("#book img")].map((img) =>
+    img.complete ? null : new Promise((done) => { img.onload = img.onerror = done; })));
+  button.disabled = false;
+  button.textContent = "🖨 Print / Save as PDF";
+  window.print();
+});
 
 start();
