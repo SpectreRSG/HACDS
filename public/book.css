@@ -1,0 +1,87 @@
+/* Styles for the printed book. On screen, each page looks like a sheet of paper. */
+
+.book { padding: 0 16px 48px; }
+
+.page {
+  background: #fff;
+  width: var(--page-w, 8in);
+  max-width: 100%;
+  min-height: var(--page-h, 10in);
+  margin: 0 auto 24px;
+  padding: 0.75in;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+  font-family: var(--serif);
+}
+@media (max-width: 700px) { .page { padding: 28px 20px; min-height: 0; } }
+
+/* Cover */
+.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  border: 0;
+}
+.cover .frame {
+  border: 2px solid var(--gold);
+  outline: 1px solid var(--gold);
+  outline-offset: 6px;
+  padding: 1in 0.4in;
+}
+.cover h1 { font-size: 2.6rem; line-height: 1.1; color: var(--navy); margin: 0 0 16px; }
+.cover .subtitle { font-size: 1.2rem; font-style: italic; margin: 0 0 40px; color: #444; }
+.cover .org { font: 600 0.9rem/1.5 var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); margin: 0; }
+.cover .place { font-size: 1rem; color: #555; margin: 6px 0 0; }
+
+.intro h2, .toc h2, .index h2 { color: var(--navy); font-size: 1.8rem; margin: 0 0 18px; text-align: center; }
+.intro p { font-size: 1.05rem; line-height: 1.65; }
+
+.toc-section { margin-bottom: 14px; break-inside: avoid; }
+.toc-section h3 { font-size: 1.05rem; color: var(--navy); margin: 0 0 4px; border-bottom: 1px solid #e3dccb; padding-bottom: 3px; }
+.toc-section ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 24px; font-size: 0.95rem; }
+.toc-section li { padding: 1px 0; break-inside: avoid; }
+.toc-section li span { color: #777; font-style: italic; }
+@media (max-width: 700px) { .toc-section ul { columns: 1; } }
+
+/* Category divider pages */
+.divider {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.divider h2 { font-size: 2.6rem; color: var(--navy); margin: 0; }
+.divider .rule { width: 80px; height: 3px; background: var(--gold); margin: 18px auto; }
+.divider p { font-style: italic; color: #666; margin: 0; }
+
+.recipe li { break-inside: avoid; }
+.recipe-photo, .tips { break-inside: avoid; }
+
+.index ul { list-style: none; padding: 0; margin: 0 0 16px; columns: 2; column-gap: 24px; }
+.index h3 { color: var(--navy); margin: 14px 0 4px; font-size: 1.05rem; }
+.index li { break-inside: avoid; padding: 1px 0; }
+@media (max-width: 700px) { .index ul { columns: 1; } }
+
+.colophon { text-align: center; color: #666; font-style: italic; margin-top: 32px; }
+
+/* ---------- Printing ---------- */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .no-print { display: none !important; }
+  .book { padding: 0; }
+  .page {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    break-after: page;
+  }
+  .cover, .divider { min-height: calc(var(--page-h) - 1.6in); }
+  .cover .frame { padding: 1.4in 0.4in; }
+  .recipe-title { font-size: 20pt; }
+  .recipe-body { grid-template-columns: 2fr 3fr; gap: 0.3in; }
+  .recipe-photo img { max-height: 2.6in; }
+  a { color: inherit; text-decoration: none; }
+}

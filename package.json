@@ -1,0 +1,16 @@
+{
+  "name": "hacds-community-cookbook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Community cookbook recipe collector for the HACDS Parents Association",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.6"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.0.3"
+  }
+}

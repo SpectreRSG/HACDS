@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#1f3a5f" />
+  <title>Share a Recipe · HACDS Community Cookbook</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>HACDS Community Cookbook</h1>
+    <p>Hebrew Academy Parents Association · Huntington Beach, CA</p>
+  </header>
+
+  <main>
+    <!-- Step A: passphrase -->
+    <section id="gate" class="card">
+      <h2>Welcome! 👋</h2>
+      <p class="lead">We're collecting our community's favorite recipes for a keepsake cookbook. Every copy supports the Parents Association.</p>
+      <form id="gate-form" novalidate>
+        <div id="gate-error" class="notice error" hidden></div>
+        <label>Passphrase
+          <input name="passphrase" type="password" autocomplete="current-password" required
+            placeholder="From the school newsletter" />
+          <span class="hint">Not sure? Ask your class parent or check the school email.</span>
+        </label>
+        <p><button class="button block" type="submit">Start sharing a recipe</button></p>
+      </form>
+    </section>
+
+    <!-- Step B: the recipe form -->
+    <form id="recipe-form" novalidate hidden>
+      <div class="notice info">Fill in the sections below — it takes about 5 minutes. Your progress is saved on this device as you type.</div>
+      <div id="fields"></div>
+      <div id="form-error" class="notice error" hidden></div>
+      <div class="submit-bar">
+        <button type="button" class="button secondary" id="preview-btn">Preview</button>
+        <button type="submit" class="button" id="submit-btn">Submit recipe</button>
+      </div>
+    </form>
+
+    <!-- Step C: thank you -->
+    <section id="thanks" class="card center" hidden>
+      <p class="big-emoji">🎉</p>
+      <h2 style="justify-content:center">Thank you!</h2>
+      <p class="lead">We received <strong id="thanks-title"></strong>. The cookbook team may email you if we have a question.</p>
+      <p><button class="button" id="another-btn" type="button">Share another recipe</button></p>
+    </section>
+  </main>
+
+  <dialog id="preview">
+    <div class="dialog-head">
+      <h2>How it will look in the book</h2>
+      <button class="button link" type="button" data-close>Close</button>
+    </div>
+    <div class="dialog-body"><div class="card" id="preview-body"></div></div>
+  </dialog>
+
+  <script type="module" src="/js/submit.js"></script>
+</body>
+</html>

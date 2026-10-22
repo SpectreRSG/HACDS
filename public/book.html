@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Cookbook (Print Version) · HACDS</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/book.css" />
+  <style id="page-size"></style>
+</head>
+<body>
+  <div class="no-print">
+    <header class="site-header">
+      <h1>Print-Ready Cookbook</h1>
+      <p><a href="/admin.html" style="color:#fff">← Back to admin</a></p>
+    </header>
+    <main>
+      <div id="book-error" class="notice error" hidden></div>
+      <form id="settings" class="card" hidden>
+        <h2>Book settings</h2>
+        <label>Book title
+          <input name="title" maxlength="120" />
+        </label>
+        <label>Subtitle
+          <input name="subtitle" maxlength="200" />
+        </label>
+        <label>Welcome note (first page)
+          <textarea name="intro" rows="5" maxlength="5000"></textarea>
+        </label>
+        <label>Page size
+          <select name="pageSize">
+            <option value="8x10">8 × 10 in (popular hardcover cookbook size)</option>
+            <option value="letter">8.5 × 11 in (US Letter)</option>
+            <option value="6x9">6 × 9 in (compact)</option>
+          </select>
+        </label>
+        <label class="check">
+          <input type="checkbox" name="onlyApproved" />
+          <span>Only include recipes marked <strong>Approved</strong></span>
+        </label>
+        <p id="book-count" class="hint" style="margin-top:12px"></p>
+        <div class="actions">
+          <button class="button secondary" type="submit" id="save-settings">Save settings</button>
+          <button class="button" type="button" id="print-btn">🖨 Print / Save as PDF</button>
+        </div>
+        <details style="margin-top:14px">
+          <summary><strong>How to make the PDF for the printer</strong></summary>
+          <ol class="hint" style="margin-top:8px">
+            <li>Use <strong>Google Chrome</strong> on a computer (not a phone).</li>
+            <li>Click <strong>Print / Save as PDF</strong>. Set <em>Destination</em> to <strong>Save as PDF</strong>.</li>
+            <li>Under <em>More settings</em>: turn <strong>Headers and footers OFF</strong>, turn <strong>Background graphics ON</strong>, Margins: <strong>Default</strong>.</li>
+            <li>Upload the PDF as the interior file to a print-on-demand service (for example Lulu, Blurb or a local printer) and pick the same page size.</li>
+          </ol>
+        </details>
+      </form>
+    </main>
+  </div>
+
+  <div id="book" class="book"></div>
+
+  <script type="module" src="/js/book.js"></script>
+</body>
+</html>

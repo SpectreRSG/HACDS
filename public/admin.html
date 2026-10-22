@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#1f3a5f" />
+  <title>Cookbook Admin · HACDS</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>Cookbook Admin</h1>
+    <p>HACDS Parents Association</p>
+  </header>
+
+  <main class="wide">
+    <!-- Login -->
+    <section id="gate" class="card" style="max-width:480px;margin:0 auto">
+      <h2>Cookbook team sign-in</h2>
+      <form id="gate-form" novalidate>
+        <div id="gate-error" class="notice error" hidden></div>
+        <label>Admin passphrase
+          <input name="passphrase" type="password" autocomplete="current-password" required />
+        </label>
+        <p><button class="button block" type="submit">Sign in</button></p>
+      </form>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dashboard" hidden>
+      <div class="actions" style="margin-bottom:16px">
+        <a class="button" href="/book.html">📖 Print-ready book</a>
+        <button class="button secondary" id="csv-btn" type="button">⬇ Spreadsheet (CSV)</button>
+        <button class="button secondary" id="json-btn" type="button">⬇ Backup (JSON)</button>
+        <button class="button link" id="logout-btn" type="button">Sign out</button>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Search recipes, names, ingredients…" />
+        <select id="filter-category"></select>
+        <select id="filter-status"></select>
+      </div>
+
+      <div id="list"></div>
+    </section>
+  </main>
+
+  <!-- Edit a recipe -->
+  <dialog id="editor">
+    <div class="dialog-head">
+      <h2 id="editor-title">Edit recipe</h2>
+      <button class="button link" type="button" data-close>Close</button>
+    </div>
+    <div class="dialog-body">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" data-tab="edit" aria-selected="true">Edit</button>
+        <button type="button" role="tab" data-tab="preview" aria-selected="false">Book preview</button>
+      </div>
+      <form id="edit-form" novalidate>
+        <p class="hint" id="edit-meta"></p>
+        <div id="edit-fields"></div>
+        <div id="edit-error" class="notice error" hidden></div>
+        <div class="submit-bar">
+          <button type="button" class="button danger" id="delete-btn">Delete</button>
+          <button type="submit" class="button" id="save-btn">Save changes</button>
+        </div>
+      </form>
+      <div id="edit-preview" class="card" hidden></div>
+    </div>
+  </dialog>
+
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>
