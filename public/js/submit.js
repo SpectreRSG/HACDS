@@ -133,6 +133,18 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+// Start over: wipe the recipe and its saved draft, but keep their name and email.
+$("#clear-btn").addEventListener("click", () => {
+  if (!confirm("Clear this recipe and start over? Your name and email will be kept.")) return;
+  const contact = { submittedBy: form.elements.submittedBy.value, email: form.elements.email.value };
+  storage.remove("localStorage", DRAFT_KEY);
+  form.reset();
+  photo.reset();
+  fillForm(form, contact);
+  show($("#form-error"), false);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
 $("#another-btn").addEventListener("click", () => {
   form.reset();
   photo.reset();

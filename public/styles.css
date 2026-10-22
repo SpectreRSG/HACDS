@@ -52,13 +52,9 @@ main {
 }
 main.wide { max-width: 1100px; }
 
-/* ---------- Page footer ---------- */
-.site-footer {
-  text-align: center;
-  padding: 8px 16px 32px;
-  font-size: 0.9rem;
-}
-.site-footer a { color: var(--muted); }
+.site-nav { margin-top: 10px; font-size: 0.9rem; }
+.site-nav a { color: #fff; opacity: 0.85; }
+.site-nav a:hover { opacity: 1; }
 
 /* ---------- Cards and headings ---------- */
 .card {

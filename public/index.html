@@ -13,6 +13,7 @@
   <header class="site-header">
     <h1>HACDS Community Cookbook</h1>
     <p>Hebrew Academy Parents Association · Huntington Beach, CA</p>
+    <nav class="site-nav"><a href="/admin.html">Cookbook team sign-in →</a></nav>
   </header>
 
   <main>
@@ -35,6 +36,7 @@
     <form id="recipe-form" novalidate hidden>
       <div class="notice info">Fill in the sections below — it takes about 5 minutes. Your progress is saved on this device as you type.</div>
       <div id="fields"></div>
+      <p class="center"><button type="button" class="button link" id="clear-btn">Clear form and start over</button></p>
       <div id="form-error" class="notice error" hidden></div>
       <div class="submit-bar">
         <button type="button" class="button secondary" id="preview-btn">Preview</button>
@@ -50,10 +52,6 @@
       <p><button class="button" id="another-btn" type="button">Share another recipe</button></p>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <a href="/admin.html">Cookbook team sign-in</a>
-  </footer>
 
   <dialog id="preview">
     <div class="dialog-head">
