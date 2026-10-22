@@ -2,6 +2,8 @@
 
 A small website for collecting recipes from the Hebrew Academy Community Day School community and turning them into a printed hardcover cookbook. Copies are offered for donations to the HACDS Parents Association (Huntington Beach, CA).
 
+**Live site:** https://cookbook.codehound.org · **Admin:** https://cookbook.codehound.org/admin.html
+
 ## The three pages
 
 | Page | Address | Who uses it | What it does |
